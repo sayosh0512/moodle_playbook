@@ -1,1 +1,6 @@
 
+- hosts: webservers
+
+  roles:
+    - moodle
+    - replication
