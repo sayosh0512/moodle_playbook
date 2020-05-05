@@ -19,8 +19,7 @@
   become: yes
 
 - name: Move Moodle install files
-  command: mkdir /var/www/html/moodle
-  command: mv /tmp/moodle/* /var/www/html/{{hostname}}
+  command: mv /tmp/moodle /var/www/html/{{hostname}}
   become: yes
 
 
