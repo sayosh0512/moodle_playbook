@@ -21,7 +21,6 @@
 - name: Move Moodle install files
   command: mv /tmp/moodle /var/www/html/{{hostname}}
   become: yes
-  when: not check_path.stat.exists
 
 
 - name: Fix ownership of Moodle
