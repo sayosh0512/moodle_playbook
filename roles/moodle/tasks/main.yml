@@ -9,12 +9,7 @@
     group: root
     mode: 0755
   become: yes
-
-- name: Check if moodle directory exists in /var/www/html
-  stat: path=/var/www/html{{hostname}}
-  register: check_path
-
-
+  
 - name: Download Moodle archive
   get_url: dest=/tmp/ url=https://download.moodle.org/download.php/direct/stable33/moodle-3.3.4.tgz
   when: (moodle_path.stat.exists == false)
