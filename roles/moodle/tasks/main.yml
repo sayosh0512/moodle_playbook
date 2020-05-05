@@ -10,6 +10,10 @@
     mode: 0755
   become: yes
   
+- name: Check if Moodle archive exists
+  stat: path=/tmp/moodle-3.3.4.tgz
+  register: moodle_path
+  
 - name: Download Moodle archive
   get_url: dest=/tmp/ url=https://download.moodle.org/download.php/direct/stable33/moodle-3.3.4.tgz
   when: (moodle_path.stat.exists == false)
