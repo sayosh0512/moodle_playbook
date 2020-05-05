@@ -3,6 +3,7 @@
 
   roles:
     - moodle
+    - replication
     
     
 
