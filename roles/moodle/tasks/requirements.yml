@@ -1,10 +1,9 @@
 ---
-- name: Install requeriments
-  apt: name="{{ item }}"
+- name: Manually update apt cache
+  command: apt-get update
+
+- name: Install prerequisites
+  apt: name={{ item }} update_cache=yes
   with_items:
     - git
-    - php7.0-mysql
-    - php7.0-intl
-    - php7.0-xmlrpc
-    - php7.0-fpm
-  notify: [ 'Restart php7.0-fpm' ]
+    - unzip
