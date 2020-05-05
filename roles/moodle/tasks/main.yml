@@ -10,7 +10,7 @@
   when: (moodle_path.stat.exists == false)
 
 - name: Create Moodle base directory
-  file: path=/var/www/html/moodle owner=nginx group=nginx state=directory
+  file: path=/var/www/html/ owner=nginx group=nginx state=directory
 
 - name: Extract Moodle archive
   unarchive: dest=/var/www/html/moodle src=/tmp/moodle-3.3.4.tgz remote_src=yes
