@@ -11,7 +11,7 @@
   become: yes
   
 - name: Check if Moodle archive exists
-  stat: path=/tmp/moodle-3.3.4.tgz
+  stat: path=/tmp/moodle-3.6.tgz
   register: moodle_path
   
 - name: Download Moodle archive
@@ -21,7 +21,7 @@
 
 - name: Extract moodle
   unarchive:
-    src: /tmp/moodle-latest-36.tgz
+    src: /tmp/moodle-latest-3.6.tgz
     dest: /tmp
     owner: www-data
     group: www-data
