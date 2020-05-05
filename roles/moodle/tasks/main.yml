@@ -18,10 +18,9 @@
     copy: no
   become: yes
 
-- name: Move Moodle install files
-  command: mv /tmp/moodle /var/www/html/{{hostname}}
+- name: Move moodle install files
+  command: mv /tmp/moodle /var/www/html/{{server_hostname}}
   become: yes
-
 
 - name: Fix ownership of Moodle
   file: path=/srv/moodle owner=nginx group=nginx state=directory recurse=yes
