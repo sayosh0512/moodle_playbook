@@ -20,7 +20,7 @@
 
 - name: Extract moodle
   unarchive:
-    src: /tmp/moodle-latest-3.6.3.tgz
+    src: /tmp/moodle-3.6.3.tgz
     dest: /tmp
     owner: www-data
     group: www-data
