@@ -10,13 +10,13 @@
   when: (moodle_path.stat.exists == false)
 
 - name: Create Moodle base directory
-  file: path=/srv/moodle owner=nginx group=nginx state=directory
+  file: path=/var/www/html/moodle owner=nginx group=nginx state=directory
 
 - name: Extract Moodle archive
-  unarchive: dest=/srv/moodle src=/tmp/moodle-3.3.4.tgz remote_src=yes
+  unarchive: dest=/var/www/html/moodle src=/tmp/moodle-3.3.4.tgz remote_src=yes
 
 - name: Fix ownership of Moodle
-  file: path=/srv/moodle owner=nginx group=nginx state=directory recurse=yes
+  file: path=/var/www/html/moodle owner=nginx group=nginx state=directory recurse=yes
 
 - name: Create moodledata directory
-  file: path=/srv/moodle/moodledata owner=nginx group=nginx state=directory recurse=yes
+  file: path=/var/www/html/moodle/moodledata owner=nginx group=nginx state=directory recurse=yes
