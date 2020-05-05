@@ -1,30 +1,28 @@
----
-# tasks file for moodle
-
-- name: Check if Moodle archive exists
-  stat: path=/tmp/moodle-3.3.4.tgz
+--- 
+- 
+  name: "Check if Moodle archive exists"
   register: moodle_path
-
-- name: Download Moodle archive
-  get_url: dest=/tmp/ url=https://download.moodle.org/download.php/direct/stable33/moodle-3.3.4.tgz
-  when: (moodle_path.stat.exists == false)
-
-- name: Extract moodle
-  unarchive:
-    src: /tmp/moodle-3.3.4.tgz 
+  stat: path=/tmp/moodle-3.3.4.tgz
+- 
+  get_url: "dest=/tmp/ url=https://download.moodle.org/download.php/direct/stable33/moodle-3.3.4.tgz"
+  name: "Download Moodle archive"
+  when: "(moodle_path.stat.exists == false)"
+- 
+  become: true
+  name: "Extract moodle"
+  unarchive: 
+    copy: false
     dest: /tmp
-    owner: www-data
     group: www-data
-    copy: no
-  become: yes
-
-- name: Move moodle install files
-  command: mv /tmp/moodle /var/www/html/{{hostname}}
-  become: yes
-
-- name: Fix ownership of Moodle
-  file: path=/srv/moodle owner=nginx group=nginx state=directory recurse=yes
-
-- name: Create moodledata directory
-  file: path=/srv/moodle/moodledata owner=nginx group=nginx state=directory recurse=yes
-
+    owner: www-data
+    src: /tmp/moodle-3.3.4.tgz
+- 
+  become: true
+  command: "mv /tmp/moodle /var/www/html/{{hostname}}"
+  name: "Move moodle install files"
+- 
+  file: "path=/srv/moodle owner=azureadmin group=azureadmin state=directory recurse=yes"
+  name: "Fix ownership of Moodle"
+- 
+  file: "path=/srv/moodle/moodledata owner=azureadmin group=azureadmin state=directory recurse=yes"
+  name: "Create moodledata directory"
