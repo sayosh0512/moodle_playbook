@@ -16,21 +16,19 @@
 
 - name: Extract moodle
   unarchive:
-    src: /tmp/ url=https://download.moodle.org/download.php/direct/stable33/moodle-3.3.4.tgz
+    src: /tmp/moodle-3.3.4.tgz 
     dest: /tmp
     owner: www-data
     group: www-data
     copy: no
   become: yes
 
-
-- name: Move Moodle install files
+- name: Move moodle install files
   command: mv /tmp/moodle /var/www/html/{{hostname}}
   become: yes
 
-
 - name: Fix ownership of Moodle
-  file: path=/srv/moodle owner=azureadmin group=azureadmin state=directory recurse=yes
+  file: path=/srv/moodle owner=nginx group=nginx state=directory recurse=yes
 
 - name: Create moodledata directory
-  file: path=/srv/moodle/moodledata owner=azureadmin group=azureadmin state=directory recurse=yes
+  file: path=/srv/moodle/moodledata owner=nginx group=nginx state=directory recurse=yes
