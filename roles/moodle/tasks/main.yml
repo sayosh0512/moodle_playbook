@@ -1,28 +1,41 @@
---- 
-- 
-  name: "Check if Moodle archive exists"
-  register: moodle_path
-  stat: path=/tmp/moodle-3.3.4.tgz
-- 
-  get_url: "dest=/tmp/ url=https://download.moodle.org/download.php/direct/stable33/moodle-3.3.4.tgz"
-  name: "Download Moodle archive"
-  when: "(moodle_path.stat.exists == false)"
-- 
-  become: true
-  name: "Extract moodle"
-  unarchive: 
-    copy: false
+
+# tasks file for moodle
+
+- name: Create webroot
+  file:
+    state: directory
+    path: /var/www/html
+    owner: root
+    group: root
+    mode: 0755
+  become: yes
+
+- name: Check if moodle directory exists in /var/www/html
+  stat: path=/var/www/html{{hostname}}
+  register: check_path
+
+
+- name: Download Moodle archive
+  get_url: dest=/tmp/ url=https://download.moodle.org/download.php/direct/stable33/moodle-3.3.4.tgz
+  when: (moodle_path.stat.exists == false)
+
+- name: Extract moodle
+  unarchive:
+    src: /tmp/ url=https://download.moodle.org/download.php/direct/stable33/moodle-3.3.4.tgz
     dest: /tmp
-    group: www-data
     owner: www-data
-    src: /tmp/moodle-3.3.4.tgz
-- 
-  become: true
-  command: "mv /tmp/moodle /var/www/html/{{hostname}}"
-  name: "Move moodle install files"
-- 
-  file: "path=/srv/moodle owner=azureadmin group=azureadmin state=directory recurse=yes"
-  name: "Fix ownership of Moodle"
-- 
-  file: "path=/srv/moodle/moodledata owner=azureadmin group=azureadmin state=directory recurse=yes"
-  name: "Create moodledata directory"
+    group: www-data
+    copy: no
+  become: yes
+
+
+- name: Move Moodle install files
+  command: mv /tmp/moodle /var/www/html/{{hostname}}
+  become: yes
+
+
+- name: Fix ownership of Moodle
+  file: path=/srv/moodle owner=azureadmin group=azureadmin state=directory recurse=yes
+
+- name: Create moodledata directory
+  file: path=/srv/moodle/moodledata owner=azureadmin group=azureadmin state=directory recurse=yes
