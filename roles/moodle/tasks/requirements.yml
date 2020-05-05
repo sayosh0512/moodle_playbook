@@ -3,8 +3,8 @@
   apt: name="{{ item }}"
   with_items:
     - git
-    - php5-mysql
-    - php5-intl
-    - php5-xmlrpc
-    - php5-fpm
-  notify: [ 'Restart php5-fpm' ]
+    - php7.0-mysql
+    - php7.0-intl
+    - php7.0-xmlrpc
+    - php7.0-fpm
+  notify: [ 'Restart php7.0-fpm' ]
