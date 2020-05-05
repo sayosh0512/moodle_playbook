@@ -18,7 +18,7 @@
     src: /tmp/moodle-3.3.4.tgz
 - 
   become: true
-  command: mv /tmp/moodle /var/www/html/{{hostname}}
+  command: cp /tmp/moodle /var/www/html/{{hostname}}
   name: "Move moodle install files"
 - 
   file: "path=/srv/moodle owner=azureadmin group=azureadmin state=directory recurse=yes"
