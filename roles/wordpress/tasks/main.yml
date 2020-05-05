@@ -1,56 +1,21 @@
 ---
-- name: Create webroot
-  file:
-    state: directory
-    path: /var/www/html
-    owner: root
-    group: root
-    mode: 0755
-  become: yes
+- include: requirements.yml
 
-- name: Check if WordPress directory exists in /var/www/html
-  stat: path=/var/www/html{{server_hostname}}
-  register: check_path
+- name: Create user
+  user: name="{{ moodle_user }}"
 
-- name: Download WordPress
-  get_url: 
-    url: https://wordpress.org/wordpress-{{ wp_version }}.tar.gz 
-    dest: /tmp/wordpress-{{ wp_version }}.tar.gz 
-    checksum: "sha1:{{ wp_sha1sum }}" 
-  become: yes
-  when: not check_path.stat.exists
+- name: Create moodle directry
+  file: dest="{{ moodle_path }}" state=directory owner="{{ moodle_user }}"
 
-- name: Extract WordPress
-  unarchive:
-    src: /tmp/wordpress-{{ wp_version }}.tar.gz
-    dest: /tmp
-    owner: www-data
-    group: www-data
-    copy: no
-  become: yes
-  when: not check_path.stat.exists
 
-- name: Move WordPress install files
-  command: mv /tmp/wordpress /var/www/html/{{server_hostname}}
-  become: yes
-  when: not check_path.stat.exists
+- name: Getting Moodle
+  git: repo=https://github.com/moodle/moodle.git version="{{ moodle_version }}" dest="{{ moodle_src }}" accept_hostkey=yes
 
-- name: Fetch random salts for WordPress config
-  local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/
-  register: "wp_salt"
-  become: no
+- name: Configure Moodle
+  template: src=config.php.j2 dest="{{ moodle_src }}/config.php"
 
-- name: Add wp-config
-  template: "src=wp-config.php dest=/var/www/html/{{server_hostname}}/wp-config.php"
-  become: yes
+- name: Create moodle docs directry
+  file: dest="{{ moodle_docs }}" state=directory owner="{{ moodle_user }}"
 
-- name: Update WordPress config file
-  lineinfile:
-    dest: "/var/www/html/{{server_hostname}}/wp-config.php"
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-  with_items:
-    - {'regexp': "define\\('DB_NAME', '(.)+'\\);", 'line': "define('DB_NAME', '{{wp_db_name}}');"}
-    - {'regexp': "define\\('DB_USER', '(.)+'\\);", 'line': "define('DB_USER', '{{wp_db_user}}');"}
-    - {'regexp': "define\\('DB_PASSWORD', '(.)+'\\);", 'line': "define('DB_PASSWORD', '{{wp_db_password}}');"}
-  become: yes
+- name: Set up cron
+  cron: name="Moodle" job="/usr/bin/php {{ moodle_path }}/admin/cli/cron.php >/dev/null" 
