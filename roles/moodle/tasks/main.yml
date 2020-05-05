@@ -32,7 +32,7 @@
   become: yes
 
 - name: Fix ownership of Moodle
-  file: path=/var/www/html/moodle owner=azureadmin group=azureadmin state=directory recurse=yes
+  file: path=/var/www/html/moodle owner=www-data group=www-data state=directory recurse=yes
 
 - name: Create moodledata directory
-  file: path=/var/www/html/moodle/moodledata owner=azureadmin group=azureadmin state=directory recurse=yes
+  file: path=/var/www/html/moodle/moodledata owner=www-data group=www-data state=directory recurse=yes
