@@ -11,7 +11,7 @@
 
 - name: Extract moodle
   unarchive:
-    src: /tmp/ url=https://download.moodle.org/download.php/direct/stable33/moodle-3.3.4.tgz
+    src: /tmp/moodle-3.3.4.tgz 
     dest: /tmp
     owner: www-data
     group: www-data
