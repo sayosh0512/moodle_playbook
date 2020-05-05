@@ -1,21 +1,22 @@
 ---
-- include: requirements.yml
+# tasks file for moodle
 
-- name: Create user
-  user: name="{{ moodle_user }}"
+- name: Check if Moodle archive exists
+  stat: path=/tmp/moodle-3.3.4.tgz
+  register: moodle_path
 
-- name: Create moodle directry
-  file: dest="{{ moodle_path }}" state=directory owner="{{ moodle_user }}"
+- name: Download Moodle archive
+  get_url: dest=/tmp/ url=https://download.moodle.org/download.php/direct/stable33/moodle-3.3.4.tgz
+  when: (moodle_path.stat.exists == false)
 
+- name: Create Moodle base directory
+  file: path=/srv/moodle owner=nginx group=nginx state=directory
 
-- name: Getting Moodle
-  git: repo=https://github.com/moodle/moodle.git version="{{ moodle_version }}" dest="{{ moodle_src }}" accept_hostkey=yes
+- name: Extract Moodle archive
+  unarchive: dest=/srv/moodle src=/tmp/moodle-3.3.4.tgz remote_src=yes
 
-- name: Configure Moodle
-  template: src=config.php.j2 dest="{{ moodle_src }}/config.php"
+- name: Fix ownership of Moodle
+  file: path=/srv/moodle owner=nginx group=nginx state=directory recurse=yes
 
-- name: Create moodle docs directry
-  file: dest="{{ moodle_docs }}" state=directory owner="{{ moodle_user }}"
-
-- name: Set up cron
-  cron: name="Moodle" job="/usr/bin/php {{ moodle_path }}/admin/cli/cron.php >/dev/null" 
+- name: Create moodledata directory
+  file: path=/srv/moodle/moodledata owner=nginx group=nginx state=directory recurse=yes
