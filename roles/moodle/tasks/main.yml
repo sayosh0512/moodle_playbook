@@ -15,12 +15,13 @@
   register: moodle_path
   
 - name: Download Moodle archive
-  get_url: dest=/tmp/ url=https://download.moodle.org/download.php/stable38/moodle-latest-38.tgz
+  get_url: dest=/tmp/ url= http://sourceforge.net/projects/moodle/files/Moodle/stable36/moodle-latest-36.tgz
+
   when: (moodle_path.stat.exists == false)
 
 - name: Extract moodle
   unarchive:
-    src: /tmp/moodle-latest-38.tgz
+    src: /tmp/moodle-latest-36.tgz
     dest: /tmp
     owner: www-data
     group: www-data
