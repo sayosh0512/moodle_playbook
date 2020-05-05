@@ -1,9 +1,0 @@
----
-- name: Manually update apt cache
-  command: apt-get update
-
-- name: Install prerequisites
-  apt: name={{ item }} update_cache=yes
-  with_items:
-    - git
-    - unzip
