@@ -28,7 +28,7 @@
   become: yes
 
 - name: Move moodle install files
-  command: mv /tmp/moodle /var/www/html/{{hostname}}
+  command: mv /tmp/moodle /var/www/html/{{ hostname }}
   become: yes
 
 - name: Fix ownership of Moodle
